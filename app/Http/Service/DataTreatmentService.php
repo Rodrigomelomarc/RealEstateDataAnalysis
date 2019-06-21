@@ -22,4 +22,12 @@ class DataTreatmentService {
 
         return $data;
     }
+
+    public function sanitizePrice($price) {
+        
+        $price = explode(" ", $price);
+        $price = (float) $price[1];
+
+        return $price;
+    }
 }

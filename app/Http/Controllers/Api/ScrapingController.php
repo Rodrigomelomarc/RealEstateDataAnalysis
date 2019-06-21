@@ -26,6 +26,7 @@ class ScrapingController extends Controller
 
                     $priceNode          = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('PRICE_NODE')));
                     $priceNode          = $dataTreatmentService->sanitizeData($priceNode);
+                    $priceNode          = $dataTreatmentService->sanitizePrice($priceNode);
 
                     $descriptionNode    = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('DESCRIPTION_NODE')));
                     $descriptionNode    = $dataTreatmentService->sanitizeData($descriptionNode);
