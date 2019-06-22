@@ -6,47 +6,52 @@ use App\Http\Controllers\Controller;
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Http\Service\DataTreatmentService;
-use function GuzzleHttp\json_encode;
-use function Opis\Closure\serialize;
+use App\Property;
 
 class ScrapingController extends Controller
 {
+    private $dataTreatmentService = null;
+    private $property = null;
+
+    public function __construct() {
+        $this->dataTreatmentService = new DataTreatmentService();
+        $this->property             = new Property();
+    }
+
     public function retrieveData(Client $client)
     {
-        $dataTreatmentService = new DataTreatmentService();
 
         for ($i = 1; $i <= 100; $i++) {
             $crawler = $client->request('GET', env('SCRAP_URL') . "?o=$i" . "&sf=1");
 
             $crawler->filter(env('PRINCIPAL_NODE'))
-                ->each(function (Crawler $propertyNode)
-                use ($dataTreatmentService) {
+                ->each(function (Crawler $propertyNode) {
 
-                    $titleNode          = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('TITLE_NODE')));
-                    $titleNode          = $dataTreatmentService->sanitizeData($titleNode);
+                    $titleNode          = $this->dataTreatmentService->verifyDataExistence($propertyNode->filter(env('TITLE_NODE')));
+                    $titleNode          = $this->dataTreatmentService->sanitizeData($titleNode);
 
-                    $priceNode          = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('PRICE_NODE')));
-                    $priceNode          = $dataTreatmentService->sanitizeData($priceNode);
-                    $priceNode          = $dataTreatmentService->sanitizePrice($priceNode);
+                    $priceNode          = $this->dataTreatmentService->verifyDataExistence($propertyNode->filter(env('PRICE_NODE')));
+                    $priceNode          = $this->dataTreatmentService->sanitizeData($priceNode);
+                    $priceNode          = $this->dataTreatmentService->sanitizePrice($priceNode);
 
-                    $descriptionNode    = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('DESCRIPTION_NODE')));
-                    $descriptionNode    = $dataTreatmentService->sanitizeData($descriptionNode);
+                    $descriptionNode    = $this->dataTreatmentService->verifyDataExistence($propertyNode->filter(env('DESCRIPTION_NODE')));
+                    $descriptionNode    = $this->dataTreatmentService->sanitizeData($descriptionNode);
 
-                    $regionNode         = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('REGION_NODE')));
-                    $regionNode         = $dataTreatmentService->sanitizeData($regionNode);
+                    $regionNode         = $this->dataTreatmentService->verifyDataExistence($propertyNode->filter(env('REGION_NODE')));
+                    $regionNode         = $this->dataTreatmentService->sanitizeData($regionNode);
 
-                    $categoryNode       = $dataTreatmentService->verifyDataExistence($propertyNode->filter(env('CATEGORY_NODE')));
-                    $categoryNode       = $dataTreatmentService->sanitizeData($categoryNode);
+                    $categoryNode       = $this->dataTreatmentService->verifyDataExistence($propertyNode->filter(env('CATEGORY_NODE')));
+                    $categoryNode       = $this->dataTreatmentService->sanitizeData($categoryNode);
 
                     $data = [
-                        'Title' => $titleNode,
-                        'Price' => $priceNode,
-                        'Description' => $descriptionNode,
-                        'Region' => $regionNode,
-                        'Category' => $categoryNode
+                        'title' => $titleNode,
+                        'price' => $priceNode,
+                        'description' => $descriptionNode,
+                        'region' => $regionNode,
+                        'category' => $categoryNode
                     ];
 
-                    return serialize($data);
+                    $this->property->store($data);
                 });
         }
     }

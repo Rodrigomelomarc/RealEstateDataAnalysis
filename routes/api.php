@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('Api')->name('api.')->group(function() {
     Route::prefix('/properties')->group(function() {
-        Route::post('', 'PropertiesController@store');
+        Route::get('', 'PropertiesController@index');
     });
     Route::get('/scrapdata', 'ScrapingController@retrieveData');
 });

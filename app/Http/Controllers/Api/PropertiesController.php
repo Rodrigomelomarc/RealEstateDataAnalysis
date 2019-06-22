@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Property;
+use App\Http\Controllers\Controller;
 
 class PropertiesController extends Controller
 {
+    private $property = null;
+    public function __construct() {
+        $this->property = new Property();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +20,7 @@ class PropertiesController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json($this->property->retrieveAll());
     }
 
     /**
@@ -22,10 +29,10 @@ class PropertiesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    /* public function store(Request $request)
     {
         //
-    }
+    } */
 
     /**
      * Display the specified resource.

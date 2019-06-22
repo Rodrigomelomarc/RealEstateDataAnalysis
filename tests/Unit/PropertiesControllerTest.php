@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PhpParser\Node\Stmt\Property;
+use App\Property;
 
 class PropertiesControllerTest extends TestCase
 {
