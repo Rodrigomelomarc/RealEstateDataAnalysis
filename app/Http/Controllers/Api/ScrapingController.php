@@ -7,6 +7,7 @@ use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Http\Service\DataTreatmentService;
 use function GuzzleHttp\json_encode;
+use function Opis\Closure\serialize;
 
 class ScrapingController extends Controller
 {
@@ -45,7 +46,7 @@ class ScrapingController extends Controller
                         'Category' => $categoryNode
                     ];
 
-                    var_dump(json_encode($data));
+                    return serialize($data);
                 });
         }
     }
