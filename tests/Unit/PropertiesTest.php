@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Property;
 
-class PropertiesControllerTest extends TestCase
+class PropertiesTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,22 +29,21 @@ class PropertiesControllerTest extends TestCase
 
     public function testStore() : void {
        
-        $data = [
+       /*  $data = [
             'id' => 1,
             'title' => 'imovel',
             'price' => 10.0,
             'description' => 'Bom imovel',
             'region' => 'vale dourado',
             'category' => 'casa'
-        ];
+        ]; */
 
-        $response = $this->postJson('/api/properties', $data);
-        $response->assertStatus(201);
+        $response = $this->get('/api/scrapdata');
+        $response->assertStatus(200);
     }
 
     public function testindex() : void {
         $response = $this->getJson('/api/properties');
         $response->assertStatus(200);
-        $response->assertSee($this->property);
     }
 }
