@@ -20,6 +20,7 @@ class ScrapingController extends Controller
 
     public function retrieveData(Client $client)
     {
+        set_time_limit(0);
 
         for ($i = 1; $i <= 100; $i++) {
             $crawler = $client->request('GET', env('SCRAP_URL') . "?o=$i" . "&sf=1");
@@ -51,7 +52,13 @@ class ScrapingController extends Controller
                         'category' => $categoryNode
                     ];
 
-                    $this->property->store($data);
+                    $this->property->create([
+                        'title'         => $data['title'],
+                        'price'         => $data['price'],
+                        'description'   => $data['description'],
+                        'region'        => $data['region'],
+                        'category'      => $data['category']
+                        ]);
                 });
         }
     }

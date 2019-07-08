@@ -20,7 +20,11 @@ class PropertiesController extends Controller
      */
     public function index()
     {
-        return response()->json($this->property->retrieveAll());
+        return response()->json($this->property
+        ->query()
+        ->orderBy('id')
+        ->get()            
+    );
     }
 
     /**
